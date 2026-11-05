@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment files (never commit secrets)
+.env
+.env.*
+!.env.example
+
+# Django
+db.sqlite3
+*.log
+django/staticfiles/
+django/media/*
+!django/media/.gitkeep
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

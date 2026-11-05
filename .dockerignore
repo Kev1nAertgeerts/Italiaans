@@ -1,0 +1,19 @@
+.git
+.gitignore
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Never ship environment files in the image
+.env
+.env.*
+
+db.sqlite3
+django/staticfiles/
+django/media/
+*.md
+!README.md
+.vscode/
+.idea/

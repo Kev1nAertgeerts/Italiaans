@@ -1,0 +1,40 @@
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - /etc/italiaans/.env
+    volumes:
+      - ${HETZNER_VOLUME_PATH}:/app/django/media
+    expose:
+      - "8000"
+    networks:
+      - traefik-public
+      # Exception: if PostgreSQL is only reachable through the shared `database`
+      # network, also attach it here (see README):
+      # - database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+
+      - traefik.http.routers.italiaans.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.italiaans.entrypoints=websecure
+
+      - traefik.http.routers.italiaans.tls=true
+      - traefik.http.routers.italiaans.tls.certresolver=letsencrypt
+      - traefik.http.routers.italiaans.middlewares=secure-headers@file
+
+      - traefik.http.services.italiaans.loadbalancer.server.port=8000
+
+networks:
+  traefik-public:
+    external: true
+  database:
+    external: true
+    name: ${POSTGRES_DOCKER_NETWORK:-postgres}
