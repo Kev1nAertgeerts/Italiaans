@@ -10,6 +10,7 @@ services:
       - "8000"
     networks:
       - traefik-public
+      - shared_internal
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
       interval: 30s
@@ -32,6 +33,6 @@ services:
 networks:
   traefik-public:
     external: true
-  database:
+  shared_internal:
     external: true
-    name: ${POSTGRES_DOCKER_NETWORK:-postgres}
+    name: ${SHARED_INTERNAL_NETWORK:-shared_internal}
