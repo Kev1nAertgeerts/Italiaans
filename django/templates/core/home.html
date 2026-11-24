@@ -10,7 +10,7 @@
   {% if user.is_authenticated %}
     <p>Signed in as {{ user.username }}.</p>
   {% else %}
-    <p><a href="{% url 'login' %}">Log in</a></p>
+    <p><a href="{% url 'accounts:login_user' %}">Log in</a></p>
   {% endif %}
 </body>
 </html>

@@ -1,29 +1,34 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.shortcuts import redirect, render
-from django.utils.http import url_has_allowed_host_and_scheme
+from django.contrib import messages
+from django.urls import reverse
+from apps.accounts.utils import UserAgentParser
+
+User = get_user_model()
 
 
-def login_view(request):
-    if request.user.is_authenticated:
-        return redirect("home")
+def login_user(request):
+    template_name = "accounts/login.html"
+    context = {}
 
-    error = None
     if request.method == "POST":
-        username = request.POST.get("username", "")
-        password = request.POST.get("password", "")
-        user = authenticate(request, username=username, password=password)
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        if User.objects.filter(username=username, is_active=False).exists():
+            messages.error(request, "Account is inactief. Neem contact op met de beheerder.")
+            return redirect(reverse("accounts:login_user"))
+        else:
+            user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            next_url = request.POST.get("next") or request.GET.get("next")
-            if next_url and url_has_allowed_host_and_scheme(
-                next_url, allowed_hosts={request.get_host()},
-                require_https=request.is_secure(),
-            ):
-                return redirect(next_url)
-            return redirect("home")
-        error = "Invalid username or password."
+            UserAgentParser().save_login_history(request)
+            return redirect(reverse("core:home"))
+        else:
+            messages.error(request, "Invalid username or password")
+            return redirect(reverse("accounts:login_user"))
+    return render(request, template_name, context)
 
-    return render(request, "accounts/login.html", {
-        "error": error,
-        "next": request.POST.get("next") or request.GET.get("next", ""),
-    })
+
+def logout_user(request):
+    logout(request)
+    return redirect(reverse("accounts:login_user"))
