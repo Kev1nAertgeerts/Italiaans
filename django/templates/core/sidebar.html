@@ -1,0 +1,123 @@
+{% load static %}
+
+<aside class="app-sidebar d-flex flex-column flex-shrink-0 text-white bg-dark">
+<div class="app-sidebar-panel bg-dark p-3">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        <span class="fs-5.5 text-center text-warning"><img src="{% static "logo_no_bg.png" %}" alt="Logo" class="img-fluid" width="50" height="50" style="margin-left: auto; margin-right: auto;"> Real estate seller</span>
+    </a>
+    <hr>
+    {% if not user.is_authenticated %}
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="#" class="nav-link {% if request.path == "/realestateseller/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                ...
+            </a>
+        </li>   
+        <li class="nav-item">
+            <a href="#" class="nav-link {% if request.path == "/prijzen/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#currency-exchange"></use></svg>
+                ...
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link {% if request.path == "/realestateseller-employe/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#people"></use></svg>
+                ...
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link {% if request.path == "/contact/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                ...
+            </a>
+        </li>
+    </ul>
+    {% endif %}
+    {% if user.is_authenticated %}
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+            <a href="#" class="nav-link {% if request.path == "/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                ...
+            </a>
+            </li>
+            <li>
+            <a href="#" class="nav-link {% if request.path == "/dashboard/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                ...
+            </a>
+            </li>
+            <li>
+            <a href="#" class="nav-link {% if request.path == "/lopende-woningen/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                ...
+            </a>
+            </li>
+            <li>
+            <a href="#" class="nav-link {% if request.path == "/producten/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                ...
+            </a>
+            </li>
+            <li>
+            <a href="#" class="nav-link {% if request.path == "/customer/customer-list/" %}active{% endif %} text-white" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                ...
+            </a>
+            </li>
+        </ul>
+    {% endif %}
+
+    {% if user.is_staff %}
+    <hr>
+    <div class="dropup ">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+            <strong>... menu</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark dropup  "
+            aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item"href="#">...</a></li>
+            <li><a class="dropdown-item"href="#">...</a></li>
+        </ul>
+    </div>
+    {% endif %}
+        
+    <hr>
+    {% if user.is_authenticated %}
+        <div class="dropup">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{% if profile_image %}{{ profile_image.image.url }}{% else %}{% static 'logo_no_bg.png' %}{% endif %}" alt="" width="32" height="32" class="rounded-circle me-2" style="object-fit: cover;">
+            <strong>{{ username }}</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
+                <li><a class="dropdown-item" href="#">...</a></li>
+                {% if user.immo_owner %}
+                <li><a class="dropdown-item" href="#">...</a></li>
+                {% endif %}
+                <li><a class="dropdown-item" href="#">...</a></li>
+                <li><a class="dropdown-item" href="#">...</a></li>
+                <hr>
+                <li><a class="dropdown-item" href="#">...</a></li>
+            </ul>
+        </div>
+    {% endif %}
+    {% if not user.is_authenticated %}
+        <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+                <a href="{% url "accounts:login_user" %}" class="nav-link {% if request.path == "/accounts/login/" %}active{% endif %} text-white" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#person"></use></svg>
+                    Login
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if request.path == "/accounts/register/" %}active{% endif %} text-white disabled" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#person-plus"></use></svg>
+                    Registreren
+                </a>
+            </li>
+        </ul>
+    {% endif %}
+</div>
+</aside>
